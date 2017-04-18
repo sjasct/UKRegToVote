@@ -74,7 +74,7 @@ namespace UkRegVoteBot
 
                 }
 
-                // repeat every 20 sec
+                // repeat every 1hr
                 System.Threading.Thread.Sleep(3600000);
 
             }
