@@ -33,6 +33,12 @@ namespace UkRegVoteBot
         static void sendTweet()
         {
 
+            int min = DateTime.Now.Minute;
+            int hour = DateTime.Now.Hour;
+            int date = DateTime.Now.Day;
+            int month = DateTime.Now.Month;
+
+            // Reg
             string regUrl = " https://www.gov.uk/register-to-vote ";
             string hash = " #GeneralElection ";
             string foot = regUrl + hash;
@@ -46,14 +52,57 @@ namespace UkRegVoteBot
                 "If you're having exams on the day of the election, you can sign up for a postal vote!" + foot,
                 "Student? You can register to vote at home and your Uni accommodation" + foot,
                 "Outside of the UK on the 8th of June? You can still register for a postal vote!" + foot,
+                "You only have until the 22nd of May to register!" + foot,
+                "If you're 16-17, you can still register even though you can't yet vote!" + foot,
+
             };
+
+            //vote day
+            string hrsLeft = ((22 - 7) - hour).ToString();
+            string hrsLeftStatement = hrsLeft + " hours left!";
+            string footVote = hrsLeftStatement + hash;
+
+            string[] tweetsVote = new string[]
+            {
+                "Remember to go out and vote to make your voice heard!" + foot,
+                "Remember to vote if you haven't already! " + foot,
+                "Vote!" + foot,
+                "Vote vote vote!" + regUrl,
+            };
+
+            while (true) {
+
+                // if before reg deadline
+                if(date < 22 && month < 5)
+                {
+                    SendTweet(tweetsReg, 60);
+                }
+                // if between 7pm-10pm on vote day
+                else if(date == 8 && month == 6 && hour >= 7 && hour <= 22)
+                {
+                    SendTweet(tweetsVote, 30);
+                }
+
+            }
+
+        }
+
+        static void SendTweet(string[] tweetArray, int interval)
+        {
+
+            int min = DateTime.Now.Minute;
+
 
             Random random = new Random();
 
-            string chosenTweet = null;
+            // if
+            // specified tweet every 60 mins and it's minute 0
+            // or
+            // specified tweet every 30 mins and it's miniute 0 or 40
+            if ((interval == 60 && min == 0) || (interval == 30 && (min == 0 || min == 30)) )
+            {
 
-            while (true) {
-                chosenTweet = tweetsReg[random.Next(tweetsReg.Length)];
+                string chosenTweet = tweetArray[random.Next(tweetArray.Length)];
 
                 // try to tweet
                 try
@@ -71,15 +120,14 @@ namespace UkRegVoteBot
                 {
                     Log("Tweet success!", "success");
                     Log(chosenTweet, "");
-
+                    Console.WriteLine();
+                    System.Threading.Thread.Sleep(30000);
                 }
-
-                // repeat every 1hr
-                System.Threading.Thread.Sleep(3600000);
 
             }
 
-            
+            System.Threading.Thread.Sleep(30000);
+
         }
 
         static void Log(string msg, string type)
@@ -97,7 +145,9 @@ namespace UkRegVoteBot
                 Console.ForegroundColor = ConsoleColor.White;
             }
 
-            Console.WriteLine(DateTime.Now + " - " + msg);
+            Console.WriteLine(DateTime.Now + "  |  " + msg);
         }
+
+        
     }
 }
