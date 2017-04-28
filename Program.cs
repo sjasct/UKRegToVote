@@ -25,12 +25,14 @@ namespace UkRegVoteBot
             finally
             {
                 Log("Connect success!", "success");
+                //Tweet.PublishTweet("test");
+
             }
-            sendTweet();
+            iDontKnowWhatToNameThisMethod();
             Console.ReadLine();
         }
 
-        static void sendTweet()
+        static void iDontKnowWhatToNameThisMethod()
         {
 
             int min = DateTime.Now.Minute;
@@ -38,56 +40,91 @@ namespace UkRegVoteBot
             int date = DateTime.Now.Day;
             int month = DateTime.Now.Month;
 
-            // Reg
-            string regUrl = " https://www.gov.uk/register-to-vote ";
-            string hash = " #GeneralElection ";
-            string foot = regUrl + hash;
+            /*
+             * 
+             * REGISTERING TO VOTE
+             * Til 22nd May
+             * 
+             */
+
+            string[] hashtags = new string[]
+            {
+                // General
+                "#GeneralElection",
+                "#GE",
+                "#GE17",
+                "#GE2017",
+                "#UKPolitics",
+                "#SnapElection",
+
+                // Party Specific
+                "#labour #tories",
+                "#may #corbyn",
+                "#libdems #greens",
+                "#ukip #snp",
+
+            };
 
             string[] tweetsReg = new string[]
             {
-                "Remember to register to vote before it's too late!" + foot,
-                "Have you changed your address since the last election you voted in? You need to re-register!" + foot,
-                "Registering to vote usually only takes 5 minutes of your time. Do it before you forget!" + foot,
-                "Just turned 18? Is the 2017" + hash + "the first election you'll vote in? Remember to register!" + regUrl,
-                "If you're having exams on the day of the election, you can sign up for a postal vote!" + foot,
-                "Student? You can register to vote at home and your Uni accommodation" + foot,
-                "Outside of the UK on the 8th of June? You can still register for a postal vote!" + foot,
-                "You only have until the 22nd of May to register!" + foot,
-                "If you're 16-17, you can still register even though you can't yet vote!" + foot,
+                "Remember to register to vote before it's too late!",
+                "Have you changed your address since the last election you voted in? You need to re-register!",
+                "Registering to vote usually only takes 5 minutes of your time. Do it before you forget!",
+                "Just turned 18? Is this the first election you'll vote in? Remember to register!",
+                "If you're having exams on the day of the election, you can sign up for a postal vote!",
+                "Student? You can register to vote at home and your Uni accommodation",
+                "Outside of the UK on the 8th of June? You can still register for a postal vote!",
+                "You only have until the 22nd of May to register!",
+                "If you're 16-17, you can still register even though you can't yet vote!",
 
             };
 
-            //vote day
+
+
+            /*
+             * 
+             * DAY OF VOTE
+             * 8th June 2017
+             * 7am-10pm
+             * 
+             */
+
             string hrsLeft = ((22 - 7) - hour).ToString();
             string hrsLeftStatement = hrsLeft + " hours left!";
-            string footVote = hrsLeftStatement + hash;
+            string footVote = hrsLeftStatement;
 
             string[] tweetsVote = new string[]
             {
-                "Remember to go out and vote to make your voice heard!" + foot,
-                "Remember to vote if you haven't already! " + foot,
-                "Vote!" + foot,
-                "Vote vote vote!" + regUrl,
+                "Remember to go out and vote to make your voice heard!",
+                "Remember to vote if you haven't already! ",
+                "Vote!",
+                "Vote vote vote!",
             };
+
+            /*
+             * 
+             * Date Checking
+             * 
+             */
 
             while (true) {
 
                 // if before reg deadline
-                if(date < 22 && month < 5)
+                if (month < 5 || (date < 22 && month == 5))
                 {
-                    SendTweet(tweetsReg, 60);
+                    SendTweet(tweetsReg, 60, hashtags);
                 }
                 // if between 7pm-10pm on vote day
                 else if(date == 8 && month == 6 && hour >= 7 && hour <= 22)
                 {
-                    SendTweet(tweetsVote, 30);
+                    SendTweet(tweetsVote, 30, hashtags);
                 }
 
             }
 
         }
 
-        static void SendTweet(string[] tweetArray, int interval)
+        static void SendTweet(string[] tweetArray, int interval, string[] hashtags)
         {
 
             int min = DateTime.Now.Minute;
@@ -99,15 +136,18 @@ namespace UkRegVoteBot
             // specified tweet every 60 mins and it's minute 0
             // or
             // specified tweet every 30 mins and it's miniute 0 or 40
+
             if ((interval == 60 && min == 0) || (interval == 30 && (min == 0 || min == 30)) )
             {
 
-                string chosenTweet = tweetArray[random.Next(tweetArray.Length)];
+                string chosenTweet = tweetArray[random.Next(tweetArray.Length)] + " " + hashtags[random.Next(hashtags.Length)];
+                string chosenWithUrl = chosenTweet + " https://www.gov.uk/register-to-vote ";
+                ;
 
                 // try to tweet
                 try
                 {
-                    Tweet.PublishTweet(chosenTweet);
+                    Tweet.PublishTweet(chosenWithUrl);
                 }
                 // catch error
                 catch (Exception ex)
@@ -118,14 +158,13 @@ namespace UkRegVoteBot
                 // detail success + tweet posted
                 finally
                 {
-                    Log("Tweet success!", "success");
-                    Log(chosenTweet, "");
+                    Log("Tweet success! Length: " + (chosenTweet.Length + 23), "success");
+                    Log(chosenWithUrl, "");
                     Console.WriteLine();
                     System.Threading.Thread.Sleep(30000);
                 }
 
             }
-
             System.Threading.Thread.Sleep(30000);
 
         }
