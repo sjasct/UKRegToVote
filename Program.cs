@@ -12,6 +12,8 @@ namespace UkRegVoteBot
         static void Main(string[] args)
         {
 
+            Console.Title = "@UKRegToVote Twitter Bot";
+
             try {
                 auth authDetails = new auth();
                 Auth.SetUserCredentials(authDetails.consumerKey, authDetails.consumerSecret, authDetails.accessToken, authDetails.accessSecret);
@@ -49,19 +51,8 @@ namespace UkRegVoteBot
 
             string[] hashtags = new string[]
             {
-                // General
                 "#GeneralElection",
-                "#GE",
-                "#GE17",
                 "#GE2017",
-                "#UKPolitics",
-                "#SnapElection",
-
-                // Party Specific
-                "#labour #tories",
-                "#may #corbyn",
-                "#libdems #greens",
-                "#ukip #snp",
 
             };
 
