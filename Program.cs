@@ -67,7 +67,14 @@ namespace UkRegVoteBot
                 "Outside of the UK on the 8th of June? You can still register for a postal vote!",
                 "You only have until the 22nd of May to register!",
                 "If you're 16-17, you can still register even though you can't yet vote!",
-
+                "This is your last chance to register to vote. Please do it if you haven't already!",
+                "Register to vote now to have your say in the 2017 General Election",
+                "Unhappy with the current government? Register to vote to have your say in the election!",
+                "No matter where you stand politically, you must register to vote in order to have your say",
+                "You can have say in who runs this country if you register to vote before midnight 22/05",
+                "Don't think you'll be able to make it to the station on voting day? Get a postal vote!",
+                "Even if you've already registered, you must update any details changed since last time!",
+                "You only have until 11:59 pm on the 22nd to register!"
             };
 
 
@@ -101,9 +108,10 @@ namespace UkRegVoteBot
             while (true) {
 
                 // if before reg deadline
-                if (month < 5 || (date < 22 && month == 5))
+                if (month < 5 || (date < 23 && month == 5))
                 {
-                    SendTweet(tweetsReg, 60, hashtags);
+                    //SendTweet(tweetsReg, 60, hashtags);
+                    SendTweet(tweetsReg, 15, hashtags);
                 }
                 // if between 7pm-10pm on vote day
                 else if(date == 8 && month == 6 && hour >= 7 && hour <= 22)
@@ -128,7 +136,7 @@ namespace UkRegVoteBot
             // or
             // specified tweet every 30 mins and it's miniute 0 or 40
 
-            if ((interval == 60 && min == 0) || (interval == 30 && (min == 0 || min == 30)) )
+            if ((interval == 60 && min == 0) || (interval == 30 && (min == 0 || min == 30)) || (interval == 15 && (min % 5 == 0)))
             {
 
                 string chosenTweet = tweetArray[random.Next(tweetArray.Length)] + " " + hashtags[random.Next(hashtags.Length)];
