@@ -1,6 +1,6 @@
 # @UKRegToVote
 
-Twitter Bot to ensure that UK citizens register to vote before the 22nd of May so that they can vote in the 2017 General Election. 
+Twitter Bot to encourage UK citizens to register to vote before the 22nd of May so that they can vote in the 2017 General Election.
 
 ![](http://i.imgur.com/cI9Mmix.jpg)
 
